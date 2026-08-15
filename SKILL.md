@@ -6,7 +6,7 @@ description: Analyze a visible Codex session and a local cross-session Wiki to i
 # AI Use Reflection
 
 Maintainer: **Jin Hefeng**<br>
-GitHub: [github.com/jinhefeng](https://github.com/jinhefeng)
+Project repository: [github.com/jinhefeng/ai-use-reflection](https://github.com/jinhefeng/ai-use-reflection)
 
 ## Purpose
 
@@ -140,4 +140,4 @@ Before handing off a skill change:
 
 ## Maintainer
 
-Jin Hefeng — [https://github.com/jinhefeng](https://github.com/jinhefeng)
+Jin Hefeng — [https://github.com/jinhefeng/ai-use-reflection](https://github.com/jinhefeng/ai-use-reflection)

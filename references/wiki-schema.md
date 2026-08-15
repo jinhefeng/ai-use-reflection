@@ -1,6 +1,6 @@
 # AI Use Reflection Wiki Schema
 
-Maintainer: Jin Hefeng — https://github.com/jinhefeng
+Maintainer: Jin Hefeng — https://github.com/jinhefeng/ai-use-reflection
 
 ## Principles
 

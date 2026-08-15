@@ -10,7 +10,7 @@ from pathlib import Path
 
 
 AUTHOR = "Jin Hefeng"
-GITHUB = "https://github.com/jinhefeng"
+GITHUB = "https://github.com/jinhefeng/ai-use-reflection"
 
 
 def load_json(path: Path, default):
