@@ -11,23 +11,24 @@ Build and publish `ai-use-reflection`, a Codex skill that turns visible human–
 - [x] A self-contained `reflection-dashboard.html` renders current review, capability, knowledge, trend, source links, and Jin Hefeng attribution.
 - [x] Scripts pass fixture-based checks and structural validation has been completed with the PyYAML dependency limitation recorded.
 - [x] A public GitHub repository is created and the project is published at `https://github.com/jinhefeng/ai-use-reflection`.
+- [ ] Runtime storage resolves to a portable shared user directory by default, supports explicit project scope, and reports the actual path after writes.
 
 ## 3. Task Tree
 
 ### T1 — Define and implement the skill package
-- Status: 已完成
-- Objective: Create the reusable skill, Wiki schema, deterministic helpers, and attribution.
-- Acceptance: Skill folder contains valid `SKILL.md`, `agents/openai.yaml`, references, and tested scripts.
+- Status: 进行中
+- Objective: Create the reusable skill, Wiki schema, portable storage resolver, deterministic helpers, and attribution.
+- Acceptance: Skill folder contains valid `SKILL.md`, `agents/openai.yaml`, references, resolver, and tested scripts.
 
 ### T2 — Implement the reflection data and presentation loop
-- Status: 已完成
-- Objective: Support quiet session registration, review thresholds, Wiki-oriented storage, and HTML dashboard output.
-- Acceptance: Fixture run creates the store, registers sessions, detects threshold, and generates a readable dashboard.
+- Status: 进行中
+- Objective: Support quiet session registration, review thresholds, portable global storage, explicit project scope, Wiki-oriented storage, and HTML dashboard output.
+- Acceptance: Fixture run resolves both global and project roots, creates the selected store, registers sessions, detects threshold, and generates a readable dashboard.
 
 ### T3 — Validate and forward-test
-- Status: 已完成
+- Status: 未开始
 - Objective: Run structural validation and realistic fixture tests; record limitations and debt.
-- Acceptance: Fixture and syntax checks pass; structural validation is either passed or its dependency blocker is recorded; no unrelated workspace files are changed.
+- Acceptance: Resolver, fixture, syntax, and structural checks pass; no unrelated workspace files are changed.
 
 ### T4 — Create and publish the GitHub project
 - Status: 已完成
@@ -39,8 +40,8 @@ Build and publish `ai-use-reflection`, a Codex skill that turns visible human–
 ## 4. Current Focus
 
 - Task: T1 → T2
-- Objective: Finish the local skill and deterministic artifact pipeline before external publication.
-- Next action: Project MVP is complete; future work can address the session-end hook.
+- Objective: Replace the project-root storage default with portable shared user storage and explicit project scope.
+- Next action: Test resolver precedence and update the installed skill and public repository.
 
 ## 5. Decision Log
 
@@ -50,14 +51,14 @@ Build and publish `ai-use-reflection`, a Codex skill that turns visible human–
 | 2026-08-15 | Use many Markdown Wiki pages, not one long file | Keeps retrieval selective and token-efficient | Wiki is the canonical data layer |
 | 2026-08-15 | Use one generated HTML file as the dashboard | Gives the user a single visual entry point without duplicating the Wiki | `reflection-dashboard.html` is generated output |
 | 2026-08-15 | Attribute the project to Jin Hefeng and link only to the project repository | User clarified that the repository address, not the account homepage, should be used | Skill, references, and dashboard include `https://github.com/jinhefeng/ai-use-reflection` |
+| 2026-08-15 | Use runtime-resolved shared user storage by default | User identified that absolute paths and project-root defaults do not support cross-IDE archives | T1, T2 |
 
 ## 6. Knowledge Context
 
-- Workspace root: `/Users/jinhefeng/Dev/skills`.
-- Project root: `/Users/jinhefeng/Dev/skills/ai-use-reflection`.
+- Project workspace: repository root containing this skill.
 - Local Git identity: `Jin Hefeng <[personal-email-removed]>`.
 - GitHub connector profile nickname: `jinhefeng`.
-- `gh` is installed but its local token is invalid; external repository creation may require browser login or re-authentication.
+- GitHub repository: public `https://github.com/jinhefeng/ai-use-reflection`, default branch `main`.
 - Proactive prompts require an application/automation/session hook; the skill provides registration and decision logic but does not run in the background.
 
 ## 7. Change History
@@ -68,6 +69,7 @@ Build and publish `ai-use-reflection`, a Codex skill that turns visible human–
 | 2026-08-15 | Corrected presentation target from HTM to HTML | User correction | T1, T2 |
 | 2026-08-15 | Initialized local Git repository and committed the skill | User requested a GitHub project | T4 |
 | 2026-08-15 | Created public GitHub repository and pushed `main` | User confirmed public visibility and completed CLI device login | T4 |
+| 2026-08-15 | Changed runtime storage from implicit project root to portable shared user storage | User identified that absolute paths and project-root defaults do not support cross-IDE archives | T1, T2 |
 
 ## 8. Detail Pointers
 
@@ -77,13 +79,14 @@ Build and publish `ai-use-reflection`, a Codex skill that turns visible human–
 - Reflection rubric: `references/reflection-rubric.md`.
 - Local commit: `0255bac feat: create AI use reflection skill`.
 - Validation: Python syntax, fixture threshold flow, HTML content inspection, and Ruby YAML parse passed; skill-creator quick validation is blocked because the active Python lacks `PyYAML`.
+- Current optimization: add `scripts/storage.py` and `scripts/resolve_storage.py`; default to platform user data, with `AI_USE_REFLECTION_HOME` and explicit project scope.
 
 ## 9. Current Round
 
-- Round: R1
-- Frontier: T1, T2, T3, T4
+- Round: R2
+- Frontier: T1, T2, T3
 - Granularity target: objective + output + acceptance + dependency
-- Exit condition: each frontier task has a first result or explicit blocker.
+- Exit condition: portable resolver, updated skill package, and validation evidence are complete.
 
 ## 10. Technical Debt Queue
 

@@ -8,6 +8,8 @@ import html
 import json
 from pathlib import Path
 
+from storage import add_storage_args, resolve_store
+
 
 AUTHOR = "Jin Hefeng"
 GITHUB = "https://github.com/jinhefeng/ai-use-reflection"
@@ -114,14 +116,17 @@ def build(root: Path) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--store", default=".ai-reflection")
+    add_storage_args(parser)
     parser.add_argument("--output", default=None)
     args = parser.parse_args()
-    root = Path(args.store)
+    storage = resolve_store(args)
+    root = storage.path
     output = Path(args.output) if args.output else root / "reflection-dashboard.html"
+    if not output.is_absolute():
+        output = Path.cwd() / output
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(build(root), encoding="utf-8")
-    print(json.dumps({"output": str(output), "bytes": output.stat().st_size}, ensure_ascii=False))
+    print(json.dumps({**storage.as_dict(), "output": str(output), "bytes": output.stat().st_size}, ensure_ascii=False))
     return 0
 
 

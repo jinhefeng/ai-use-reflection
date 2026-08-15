@@ -1,6 +1,6 @@
 ---
 name: ai-use-reflection
-description: Analyze a visible Codex session and a local cross-session Wiki to identify the human's contribution, update evidence-linked AI collaboration capabilities and domain knowledge, generate review prompts after session thresholds, and refresh a self-contained HTML dashboard. Use when the user asks to review an AI session, track cross-session collaboration growth, update a reflective Wiki, generate or refresh the reflection dashboard, or configure session-based review reminders.
+description: Analyze a visible AI IDE session and a portable cross-session Wiki to identify the human's contribution, update evidence-linked AI collaboration capabilities and domain knowledge, generate review prompts after session thresholds, and refresh a self-contained HTML dashboard. Use when the user asks to review an AI session, track cross-session collaboration growth across tools or projects, update a reflective Wiki, generate or refresh the reflection dashboard, configure session-based review reminders, or choose the runtime archive location.
 ---
 
 # AI Use Reflection
@@ -28,10 +28,21 @@ The canonical long-term data is a set of small Markdown Wiki pages. The HTML fil
 
 ## Storage contract
 
-Use `.ai-reflection/` at the project root unless the user specifies another store:
+Keep the skill package and user data separate. Never write personal records into the installed skill directory or the public GitHub repository.
+
+Resolve one runtime `<reflection-root>` for the current host. Use the shared per-user store by default:
+
+1. explicit `--store <path>`;
+2. `AI_USE_REFLECTION_HOME` when set;
+3. the host's standard per-user data directory;
+4. only when explicitly requested, a project-local `.ai-use-reflection/` directory.
+
+Run `scripts/resolve_storage.py` before the first write and report its `path`, `scope`, and `source` to the user. The resolver uses macOS Application Support, Linux XDG data, or Windows APPDATA conventions without hardcoding a machine-specific absolute path.
+
+The resolved store contains:
 
 ```text
-.ai-reflection/
+<reflection-root>/
 ├── wiki/
 │   ├── index.md
 │   ├── sessions/<session-id>.md
@@ -45,9 +56,23 @@ Use `.ai-reflection/` at the project root unless the user specifies another stor
 └── reflection-dashboard.html
 ```
 
-Use `scripts/bootstrap_store.py` to create the store without overwriting existing content. Use `scripts/register_session.py` to append a compact session record and determine whether a review suggestion is due. Use `scripts/mark_reviewed.py` after a confirmed review to close the reviewed batch. Use `scripts/build_dashboard.py` after a confirmed review or Wiki update.
+Use `scripts/bootstrap_store.py` to create the resolved store without overwriting existing content. Use `scripts/register_session.py` to append a compact session record and determine whether a review suggestion is due. Use `scripts/mark_reviewed.py` after a confirmed review to close the reviewed batch. Use `scripts/build_dashboard.py` after a confirmed review or Wiki update.
 
-Read only the current session, the relevant Wiki pages, and recent linked sessions. Use `data/link-index.json` or the Wiki index to avoid loading the entire knowledge base into context.
+Examples:
+
+```bash
+# Shared cross-session store; this is the default.
+python3 scripts/resolve_storage.py
+python3 scripts/bootstrap_store.py
+
+# Explicit project-local store, only when the user chooses project scope.
+python3 scripts/bootstrap_store.py --scope project --project-root .
+
+# Share one store across different AI IDEs on the same machine.
+AI_USE_REFLECTION_HOME="/path/selected/by/user" python3 scripts/bootstrap_store.py
+```
+
+Read only the current session, the relevant Wiki pages, and recent linked sessions. Use `data/link-index.json` or the Wiki index to avoid loading the entire knowledge base into context. After every durable write, return the resolved storage path and links to the affected files.
 
 ## Workflow
 
@@ -55,10 +80,10 @@ Read only the current session, the relevant Wiki pages, and recent linked sessio
 
 At the end of an eligible session, record only metadata: stable session ID, title, topics, completion state, review state, and a short focus summary. Treat very short or purely administrative turns as ineligible unless the user asks for a review.
 
-Run:
+Run with the resolved store options:
 
 ```bash
-python3 scripts/register_session.py --store .ai-reflection --session-id 2026-08-15-001 --title "Skill design" --topics "skill design,reflection" --summary "Defined cross-session Wiki and HTML dashboard requirements."
+python3 scripts/register_session.py --session-id 2026-08-15-001 --title "Skill design" --topics "skill design,reflection" --summary "Defined cross-session Wiki and HTML dashboard requirements."
 ```
 
 Use the script's `review_due` result to decide whether a suggestion should be shown. The default threshold is three eligible, unreviewed sessions; support a different threshold when the user configures one.
@@ -127,7 +152,7 @@ After a successful review, return clickable links to the current review, the das
 
 Treat the Wiki as user-controlled memory. Before durable writes, state what will be added or changed. Support explicit corrections such as “删掉这条”“这不是能力提升”“把它归到另一个主题”. Preserve rejected proposals only in a pending queue when the user wants an audit trail; otherwise do not retain them.
 
-If the store is missing, initialize it with the bootstrap script. If the workspace contains multiple plausible project roots, ask the user to choose rather than writing to a broad directory.
+If the shared store is missing, initialize it with the bootstrap script. If the user asks for project-local storage, confirm the project root before writing. Never silently fall back from the shared store to an arbitrary workspace directory.
 
 ## Validation
 

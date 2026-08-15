@@ -8,6 +8,8 @@ import json
 from datetime import date
 from pathlib import Path
 
+from storage import add_storage_args, resolve_store
+
 
 def read_records(path: Path) -> list[dict]:
     if not path.exists():
@@ -21,7 +23,7 @@ def read_records(path: Path) -> list[dict]:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--store", default=".ai-reflection")
+    add_storage_args(parser)
     parser.add_argument("--session-id", required=True)
     parser.add_argument("--title", required=True)
     parser.add_argument("--topics", default="")
@@ -31,7 +33,8 @@ def main() -> int:
     parser.add_argument("--threshold", type=int, default=3)
     args = parser.parse_args()
 
-    root = Path(args.store)
+    storage = resolve_store(args)
+    root = storage.path
     root.mkdir(parents=True, exist_ok=True)
     data_dir = root / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
@@ -56,6 +59,7 @@ def main() -> int:
         item for item in records + [record] if item.get("eligible") and not item.get("reviewed")
     ]
     result = {
+        **storage.as_dict(),
         "record": record,
         "eligible_unreviewed_count": len(eligible_unreviewed),
         "review_due": len(eligible_unreviewed) >= max(args.threshold, 1),

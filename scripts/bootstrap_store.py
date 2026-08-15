@@ -7,6 +7,8 @@ import argparse
 import json
 from pathlib import Path
 
+from storage import add_storage_args, resolve_store
+
 
 def write_if_missing(path: Path, content: str) -> bool:
     if path.exists():
@@ -18,9 +20,10 @@ def write_if_missing(path: Path, content: str) -> bool:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--store", default=".ai-reflection")
+    add_storage_args(parser)
     args = parser.parse_args()
-    root = Path(args.store)
+    storage = resolve_store(args)
+    root = storage.path
     created = []
 
     for directory in (
@@ -42,7 +45,7 @@ def main() -> int:
         if write_if_missing(path, content):
             created.append(str(path))
 
-    print(json.dumps({"store": str(root), "created": created}, ensure_ascii=False))
+    print(json.dumps({**storage.as_dict(), "created": created}, ensure_ascii=False))
     return 0
 
 

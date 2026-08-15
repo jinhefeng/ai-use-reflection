@@ -8,6 +8,20 @@ Maintainer: Jin Hefeng — https://github.com/jinhefeng/ai-use-reflection
 - Store durable claims as evidence-linked deltas, not an all-time narrative.
 - Keep capability pages and domain knowledge pages in separate namespaces.
 - Use stable slugs and session IDs so links remain valid when summaries evolve.
+- Keep user data outside the installed skill package and outside the public repository.
+
+## Portable storage resolution
+
+The skill resolves a logical `<reflection-root>` at runtime. Never hardcode a machine-specific absolute path in the skill.
+
+Resolution order:
+
+1. `--store <path>` supplied for the current operation;
+2. `AI_USE_REFLECTION_HOME` for a user-selected shared store;
+3. the host's standard per-user data directory;
+4. project-local `.ai-use-reflection/` only with explicit `--scope project`.
+
+Use `scripts/resolve_storage.py` to display the resolved path, scope, and source before writing. A user who wants several AI IDEs to share one archive should set the same `AI_USE_REFLECTION_HOME` in each host. A public skill repository must never be used as the personal archive.
 
 ## Page types
 
