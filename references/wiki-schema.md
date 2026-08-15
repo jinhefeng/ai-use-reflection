@@ -126,6 +126,16 @@ The current review may include:
   },
   "human_task_contribution": [
     {"category": "decisive", "note": "Defined the acceptance boundary.", "confidence": "high"}
+  ],
+  "guidance_examples": [
+    {
+      "scenario": "约束出现过晚",
+      "original_prompt": "这部分不能改。",
+      "diagnosis": "约束有效但没有在执行前进入 AI 的决策空间。",
+      "improved_prompt": "开始前先确认：保持 API 和目录结构不变；突破前先停下说明。",
+      "expected_gain": "减少返工并提高风险覆盖。",
+      "test_in_next_session": "记录是否发生越界和二次实现。"
+    }
   ]
 }
 ```

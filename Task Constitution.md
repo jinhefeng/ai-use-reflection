@@ -14,22 +14,23 @@ Build and publish `ai-use-reflection`, a portable skill that evaluates the effic
 - [x] Runtime storage resolves to a portable shared user directory by default, supports explicit project scope, and reports the actual path after writes.
 - [x] Reviews assess intervention efficacy as an evidence-backed vector, preserve a compact intervention ledger, and produce prioritized next-use guidance.
 - [x] Reviews assess human contribution to the concrete task without turning it into a general personal worth or performance score.
+- [x] Reviews provide one to three evidence-matched examples that rewrite weak interventions into better prompts and define a next-session test.
 
 ## 3. Task Tree
 
 ### T1 — Define and implement the skill package
 - Status: 已完成
-- Objective: Create the reusable skill, intervention-efficacy model, task-contribution model, Wiki schema, portable storage resolver, deterministic helpers, and attribution.
+- Objective: Create the reusable skill, intervention-efficacy model, task-contribution model, prompt-improvement examples, Wiki schema, portable storage resolver, deterministic helpers, and attribution.
 - Acceptance: Skill folder contains valid `SKILL.md`, `agents/openai.yaml`, references, resolver, and tested scripts.
 
 ### T2 — Implement the reflection data and presentation loop
 - Status: 已完成
-- Objective: Support quiet session registration, review thresholds, portable global storage, explicit project scope, intervention/contribution evidence, Wiki-oriented storage, and HTML dashboard output.
+- Objective: Support quiet session registration, review thresholds, portable global storage, explicit project scope, intervention/contribution evidence, prompt rewrites for weak interventions, Wiki-oriented storage, and HTML dashboard output.
 - Acceptance: Fixture run resolves both global and project roots, creates the selected store, registers sessions, detects threshold, and generates a readable dashboard.
 
 ### T3 — Validate and forward-test
 - Status: 已完成
-- Objective: Run structural validation and realistic fixture tests for storage and intervention/contribution dashboard data; record limitations and debt.
+- Objective: Run structural validation and realistic fixture tests for storage, intervention/contribution data, and prompt-improvement examples; record limitations and debt.
 - Acceptance: Resolver, fixture, syntax, and manual structural checks pass; the bundled validator remains unavailable because the active Python lacks `PyYAML`; no unrelated workspace files are changed.
 
 ### T4 — Create and publish the GitHub project
@@ -42,7 +43,7 @@ Build and publish `ai-use-reflection`, a portable skill that evaluates the effic
 ## 4. Current Focus
 
 - Task: Handoff
-- Objective: Keep the installed copy and public repository synchronized with the validated core review model.
+- Objective: Keep the installed copy and public repository synchronized with the validated core review model and prompt-rewrite guidance.
 - Next action: Publish the current commit and report the portable runtime storage contract.
 
 ## 5. Decision Log
@@ -75,6 +76,7 @@ Build and publish `ai-use-reflection`, a portable skill that evaluates the effic
 | 2026-08-15 | Verified global, environment-selected, project, and explicit storage modes | Fixture tests confirmed path precedence and write reporting | T1, T2, T3 |
 | 2026-08-15 | Made intervention efficacy, task contribution, and next-use guidance the primary review model | User clarified the most important value of the skill | T1, T2 |
 | 2026-08-15 | Added an intervention ledger and causal-evidence boundary | Efficiency must explain how a human move changed the trajectory, not just assign a label | T1, T2, T3 |
+| 2026-08-15 | Added typical weak-intervention cases with improved prompt wording and next-session tests | An efficacy label must lead to an actionable change in AI use | T1, T2, T3 |
 
 ## 8. Detail Pointers
 
@@ -84,7 +86,7 @@ Build and publish `ai-use-reflection`, a portable skill that evaluates the effic
 - Reflection rubric: `references/reflection-rubric.md`.
 - Local commit: updated after the core review-model optimization.
 - Validation: Python syntax, fixture threshold flow, HTML content inspection, and Ruby YAML parse passed; skill-creator quick validation is blocked because the active Python lacks `PyYAML`.
-- Current optimization: complete; the dashboard now exposes the intervention ledger, efficacy vector, task contribution, and next-use guidance.
+- Current optimization: complete; weak-intervention prompt rewrites are available in the review payload, reference library, and dashboard.
 
 ## 9. Current Round
 

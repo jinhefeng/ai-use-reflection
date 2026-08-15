@@ -71,6 +71,7 @@ def build(root: Path) -> str:
     human = review.get("human_contribution", [])
     task_contribution = review.get("human_task_contribution", []) or human
     efficacy = review.get("intervention_efficacy", {}) or {}
+    guidance_examples = review.get("guidance_examples", []) or []
     open_questions = review.get("open_questions", [])
 
     def item_markup(item):
@@ -108,6 +109,24 @@ def build(root: Path) -> str:
             )
         return "<ol class=\"ledger\">" + "".join(rows) + "</ol>"
 
+    def example_markup(items):
+        if not items:
+            return '<p class="muted">暂无针对弱干预的提示词改写示例。</p>'
+        cards = []
+        for item in items:
+            if not isinstance(item, dict):
+                cards.append(f'<article class="example"><p>{esc(item)}</p></article>')
+                continue
+            cards.append(
+                f'<article class="example"><div class="eyebrow">{esc(item.get("scenario", "典型案例"))}</div>'
+                f'<p><strong>原提示词</strong><br><span class="prompt">{esc(item.get("original_prompt", ""))}</span></p>'
+                f'<p><strong>失效原因</strong><br>{esc(item.get("diagnosis", ""))}</p>'
+                f'<p><strong>改进提示词</strong><br><span class="prompt improved">{esc(item.get("improved_prompt", ""))}</span></p>'
+                f'<p><strong>预期收益</strong>：{esc(item.get("expected_gain", ""))}</p>'
+                f'<p class="muted"><strong>下一轮验证</strong>：{esc(item.get("test_in_next_session", ""))}</p></article>'
+            )
+        return '<div class="example-grid">' + "".join(cards) + "</div>"
+
     dimensions = efficacy.get("dimensions", {}) or {}
     dimension_markup = " ".join(f'<span class="metric"><strong>{esc(key)}</strong> {esc(value)}</span>' for key, value in dimensions.items())
     efficacy_markup = f'''<div class="metric-row"><span class="metric"><strong>总体</strong> {esc(efficacy.get("overall", "暂无"))}</span><span class="metric"><strong>置信度</strong> {esc(efficacy.get("confidence", "暂无"))}</span>{dimension_markup}</div><p>{esc(efficacy.get("summary", "干预效能将在确认复盘后显示。"))}</p>{list_markup(efficacy.get("guidance", []), "暂无下一步指导。" )}'''
@@ -135,8 +154,9 @@ def build(root: Path) -> str:
     .eyebrow,.date {{ color:var(--accent); font-size:12px; text-transform:uppercase; letter-spacing:.08em; font-weight:700; }} .eyebrow {{ margin-bottom:8px; }} .muted {{ color:var(--muted); }} ul {{ margin:8px 0 0; padding-left:20px; }}
     .timeline {{ list-style:none; padding:0; margin:0; }} .timeline li {{ display:grid; grid-template-columns:120px 200px 1fr; gap:12px; padding:11px 0; border-bottom:1px solid var(--line); }} .timeline li:last-child {{ border-bottom:0; }}
     .ledger {{ margin:0; padding-left:24px; }} .ledger li {{ padding:12px 0; border-bottom:1px solid var(--line); }} .ledger li:last-child {{ border-bottom:0; }}
+    .example-grid {{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }} .example {{ padding:16px; border:1px solid var(--line); border-radius:12px; background:#fbfcff; }} .example p {{ margin:10px 0; }} .prompt {{ display:block; padding:9px 11px; margin-top:4px; background:#f2f4f8; border-radius:8px; white-space:pre-wrap; }} .prompt.improved {{ background:#edf7f0; }}
     footer {{ margin-top:36px; padding-top:18px; border-top:1px solid var(--line); color:var(--muted); font-size:13px; }}
-    @media (max-width:760px) {{ header,.hero-grid {{ display:block; }} .stamp {{ text-align:left; margin-top:14px; }} .grid {{ grid-template-columns:1fr; }} .timeline li {{ grid-template-columns:1fr; gap:2px; }} }}
+    @media (max-width:760px) {{ header,.hero-grid {{ display:block; }} .stamp {{ text-align:left; margin-top:14px; }} .grid,.example-grid {{ grid-template-columns:1fr; }} .timeline li {{ grid-template-columns:1fr; gap:2px; }} }}
   </style>
 </head>
 <body>
@@ -145,6 +165,7 @@ def build(root: Path) -> str:
   <section class="hero"><div class="hero-grid"><div><div class="eyebrow">Latest review</div><h2>{esc(review.get("title", "尚未生成本次复盘"))}</h2>{list_markup(key_points, "完成一次确认后的复盘，这里会显示本次重点。")}</div><div><div class="eyebrow">Human contribution</div>{list_markup(human, "暂无已确认的长期结论。")}</div></div></section>
   <h2>干预账本</h2><section class="panel">{intervention_markup(interventions_current)}</section>
   <h2>干预效能</h2><section class="panel">{efficacy_markup}</section>
+  <h2>典型提示词改进</h2><section class="panel">{example_markup(guidance_examples)}</section>
   <h2>人类任务贡献</h2><section class="panel">{list_markup(task_contribution, "暂无已确认的任务贡献证据。")}</section>
   <h2>开放问题</h2><section class="panel">{list_markup(open_questions, "暂无开放问题。")}</section>
   <h2>AI 协作能力</h2><section class="grid">{''.join(card_markup(card) for card in capabilities) or '<p class="muted">暂无能力页面。</p>'}</section>

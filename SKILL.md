@@ -39,6 +39,8 @@ Use `high`, `medium`, `low`, or `uncertain` with confidence and evidence. Do not
 
 Load [references/intervention-rubric.md](references/intervention-rubric.md) when tagging intervention events, comparing efficacy dimensions, or writing task-contribution evidence.
 
+Load [references/intervention-examples.md](references/intervention-examples.md) when a meaningful intervention is rated `low` or `uncertain`, or when the user asks how to improve a prompt. Include one to three matched cases using the format `原提示词 → 失效原因 → 改进提示词 → 下一轮验证`. Do not give generic advice such as “写得更详细”.
+
 Assess human contribution to the concrete task in separate categories: direction and prioritization, domain context, constraints and risk judgment, decision quality, verification, and final accountability. Use labels such as `decisive`, `enabling`, `supporting`, `necessary`, or `uncertain`, and link each conclusion to evidence. This is an assessment of contribution to a task, never a rating of the person's overall worth, intelligence, personality, or employment performance.
 
 The useful output is a loop:
@@ -171,6 +173,7 @@ Add three required analysis blocks to every substantive review:
 - **Intervention efficacy**: strongest and weakest interventions, vector assessment, observable cost, and confidence;
 - **Human task contribution**: which decisions or judgments materially enabled the outcome, with evidence;
 - **AI-use guidance**: one to three concrete changes for the next similar task, prioritized by expected leverage.
+- **Prompt improvement examples**: for each important low or uncertain intervention, show the original wording or a faithful paraphrase, the diagnosed gap, an improved prompt, and a test for the next session.
 
 Show the intervention ledger before proposing durable updates. Rank guidance
 by expected leverage and reversibility, and phrase each item as a testable
@@ -202,6 +205,7 @@ Run `scripts/build_dashboard.py` with the store path and output path. The genera
 
 - the latest session review and key points;
 - intervention efficacy vector, confidence, and guidance;
+- one to three typical prompt-improvement examples for weak or uncertain interventions;
 - human task contribution categories and evidence;
 - current capability states and evidence counts;
 - knowledge topics and open questions;

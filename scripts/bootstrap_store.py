@@ -40,7 +40,7 @@ def main() -> int:
     files = {
         root / "wiki" / "index.md": """# AI Use Reflection Wiki\n\nMaintainer: [Jin Hefeng](https://github.com/jinhefeng/ai-use-reflection)\n\n## Sections\n\n- [Sessions](sessions/)\n- [Capabilities](capabilities/)\n- [Interventions](interventions/)\n- [Task contributions](contributions/)\n- [Knowledge](knowledge/)\n- [Trends](trends/)\n""",
         root / "data" / "session-index.jsonl": "",
-        root / "data" / "current-review.json": json.dumps({"key_points": [], "interventions": [], "human_contribution": [], "intervention_efficacy": {}, "human_task_contribution": [], "open_questions": [], "capabilities": [], "knowledge": []}, ensure_ascii=False, indent=2) + "\n",
+        root / "data" / "current-review.json": json.dumps({"key_points": [], "interventions": [], "human_contribution": [], "intervention_efficacy": {}, "human_task_contribution": [], "guidance_examples": [], "open_questions": [], "capabilities": [], "knowledge": []}, ensure_ascii=False, indent=2) + "\n",
         root / "data" / "link-index.json": "{}\n",
     }
     for path, content in files.items():
