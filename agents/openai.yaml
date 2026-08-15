@@ -1,7 +1,7 @@
 interface:
   display_name: "AI 使用复盘"
-  short_description: "跨会话复盘与长期 AI 协作成长档案"
-  default_prompt: "Use $ai-use-reflection to review this session, save it to the resolved user archive, and refresh the HTML dashboard."
+  short_description: "评估 AI 干预效能并提升协作水平"
+  default_prompt: "Use $ai-use-reflection to assess my intervention efficacy, task contribution, and next-step AI-use guidance for this session."
 
 policy:
   allow_implicit_invocation: true

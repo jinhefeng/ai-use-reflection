@@ -7,6 +7,7 @@ Maintainer: Jin Hefeng — https://github.com/jinhefeng/ai-use-reflection
 - Keep pages small and focused; split a page when it becomes difficult to load selectively.
 - Store durable claims as evidence-linked deltas, not an all-time narrative.
 - Keep capability pages and domain knowledge pages in separate namespaces.
+- Keep intervention efficacy and task contribution evidence in their own namespaces.
 - Use stable slugs and session IDs so links remain valid when summaries evolve.
 - Keep user data outside the installed skill package and outside the public repository.
 
@@ -58,6 +59,18 @@ updated: 2026-08-15
 
 Keep a short current statement followed by an `Evidence Log` table. Each row must link to a session page.
 
+### Intervention efficacy page
+
+Path: `wiki/interventions/<dimension-slug>.md`
+
+Track repeated patterns such as `early-constraints`, `correction-precision`, `verification-coverage`, or `delegation`. Store the current state, evidence links, confidence, and the next experiment. Do not store a single unexplained score.
+
+### Task contribution page
+
+Path: `wiki/contributions/<category-slug>.md`
+
+Use this namespace for evidence that the user supplied direction, context, judgment, verification, or accountability that affected a concrete outcome. This is not a personal worth or performance profile.
+
 ### Knowledge page
 
 Path: `wiki/knowledge/<domain>/<topic-slug>.md`
@@ -86,6 +99,36 @@ Use a period such as `2026-08` or `2026-Q3`. Summarize changes across sessions a
 `data/session-index.jsonl` contains one JSON object per eligible session. Keep summaries short and do not store transcripts there.
 
 `data/current-review.json` contains the most recent review payload used by the dashboard. It may be replaced after a later confirmed review.
+
+The current review may include:
+
+```json
+{
+  "interventions": [
+    {
+      "event_id": "I-01",
+      "turn_ref": "user correction after draft",
+      "type": ["correction", "constraint"],
+      "signal": "The output used an absolute local path.",
+      "mechanism": "Replaced the storage contract with runtime resolution.",
+      "outcome": "The skill became usable across AI IDEs.",
+      "observable_cost": "One correction turn; avoided a later portability rewrite.",
+      "efficacy": {"leverage": "high", "timing": "medium", "verification": "medium"},
+      "confidence": "high",
+      "evidence": ["current session: storage discussion"]
+    }
+  ],
+  "intervention_efficacy": {
+    "overall": "medium",
+    "confidence": "medium",
+    "dimensions": {"leverage": "high", "timing": "low"},
+    "guidance": ["Move acceptance criteria earlier."]
+  },
+  "human_task_contribution": [
+    {"category": "decisive", "note": "Defined the acceptance boundary.", "confidence": "high"}
+  ]
+}
+```
 
 `data/link-index.json` can map topics and slugs to relative files. It is an optimization layer; Wiki pages remain authoritative.
 

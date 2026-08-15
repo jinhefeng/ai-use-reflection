@@ -2,7 +2,7 @@
 
 ## 1. Mission
 
-Build and publish `ai-use-reflection`, a Codex skill that turns visible human–AI sessions into evidence-linked cross-session capability and knowledge growth, stored as a Wiki and presented through one generated HTML dashboard.
+Build and publish `ai-use-reflection`, a portable skill that evaluates the efficiency of human interventions in AI work, identifies the user's evidence-backed contribution to concrete task outcomes, turns the findings into next-use guidance, and stores cross-session capability and knowledge growth in a Wiki presented through one generated HTML dashboard.
 
 ## 2. Success Criteria
 
@@ -12,22 +12,24 @@ Build and publish `ai-use-reflection`, a Codex skill that turns visible human–
 - [x] Scripts pass fixture-based checks and structural validation has been completed with the PyYAML dependency limitation recorded.
 - [x] A public GitHub repository is created and the project is published at `https://github.com/jinhefeng/ai-use-reflection`.
 - [x] Runtime storage resolves to a portable shared user directory by default, supports explicit project scope, and reports the actual path after writes.
+- [x] Reviews assess intervention efficacy as an evidence-backed vector, preserve a compact intervention ledger, and produce prioritized next-use guidance.
+- [x] Reviews assess human contribution to the concrete task without turning it into a general personal worth or performance score.
 
 ## 3. Task Tree
 
 ### T1 — Define and implement the skill package
 - Status: 已完成
-- Objective: Create the reusable skill, Wiki schema, portable storage resolver, deterministic helpers, and attribution.
+- Objective: Create the reusable skill, intervention-efficacy model, task-contribution model, Wiki schema, portable storage resolver, deterministic helpers, and attribution.
 - Acceptance: Skill folder contains valid `SKILL.md`, `agents/openai.yaml`, references, resolver, and tested scripts.
 
 ### T2 — Implement the reflection data and presentation loop
 - Status: 已完成
-- Objective: Support quiet session registration, review thresholds, portable global storage, explicit project scope, Wiki-oriented storage, and HTML dashboard output.
+- Objective: Support quiet session registration, review thresholds, portable global storage, explicit project scope, intervention/contribution evidence, Wiki-oriented storage, and HTML dashboard output.
 - Acceptance: Fixture run resolves both global and project roots, creates the selected store, registers sessions, detects threshold, and generates a readable dashboard.
 
 ### T3 — Validate and forward-test
 - Status: 已完成
-- Objective: Run structural validation and realistic fixture tests; record limitations and debt.
+- Objective: Run structural validation and realistic fixture tests for storage and intervention/contribution dashboard data; record limitations and debt.
 - Acceptance: Resolver, fixture, syntax, and manual structural checks pass; the bundled validator remains unavailable because the active Python lacks `PyYAML`; no unrelated workspace files are changed.
 
 ### T4 — Create and publish the GitHub project
@@ -39,9 +41,9 @@ Build and publish `ai-use-reflection`, a Codex skill that turns visible human–
 
 ## 4. Current Focus
 
-- Task: T3
-- Objective: Close the portable storage optimization with validation and synchronized installation.
-- Next action: Project optimization is complete; future work can address the session-end hook.
+- Task: Handoff
+- Objective: Keep the installed copy and public repository synchronized with the validated core review model.
+- Next action: Publish the current commit and report the portable runtime storage contract.
 
 ## 5. Decision Log
 
@@ -71,6 +73,8 @@ Build and publish `ai-use-reflection`, a Codex skill that turns visible human–
 | 2026-08-15 | Created public GitHub repository and pushed `main` | User confirmed public visibility and completed CLI device login | T4 |
 | 2026-08-15 | Changed runtime storage from implicit project root to portable shared user storage | User identified that absolute paths and project-root defaults do not support cross-IDE archives | T1, T2 |
 | 2026-08-15 | Verified global, environment-selected, project, and explicit storage modes | Fixture tests confirmed path precedence and write reporting | T1, T2, T3 |
+| 2026-08-15 | Made intervention efficacy, task contribution, and next-use guidance the primary review model | User clarified the most important value of the skill | T1, T2 |
+| 2026-08-15 | Added an intervention ledger and causal-evidence boundary | Efficiency must explain how a human move changed the trajectory, not just assign a label | T1, T2, T3 |
 
 ## 8. Detail Pointers
 
@@ -78,16 +82,16 @@ Build and publish `ai-use-reflection`, a Codex skill that turns visible human–
 - Skill instructions: `SKILL.md`.
 - Wiki schema: `references/wiki-schema.md`.
 - Reflection rubric: `references/reflection-rubric.md`.
-- Local commit: `0255bac feat: create AI use reflection skill`.
+- Local commit: updated after the core review-model optimization.
 - Validation: Python syntax, fixture threshold flow, HTML content inspection, and Ruby YAML parse passed; skill-creator quick validation is blocked because the active Python lacks `PyYAML`.
-- Current optimization: complete in source, installed skill, and public repository at commit `0bbfc44`.
+- Current optimization: complete; the dashboard now exposes the intervention ledger, efficacy vector, task contribution, and next-use guidance.
 
 ## 9. Current Round
 
-- Round: R2
-- Frontier: T1, T2, T3
+- Round: R3
+- Frontier: Handoff
 - Granularity target: objective + output + acceptance + dependency
-- Exit condition: portable resolver, updated skill package, and validation evidence are complete.
+- Exit condition: portable resolver, updated skill package, validation evidence, installed copy, and public repository are synchronized.
 
 ## 10. Technical Debt Queue
 

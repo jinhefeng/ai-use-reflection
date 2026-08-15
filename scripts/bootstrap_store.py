@@ -29,6 +29,8 @@ def main() -> int:
     for directory in (
         root / "wiki" / "sessions",
         root / "wiki" / "capabilities",
+        root / "wiki" / "interventions",
+        root / "wiki" / "contributions",
         root / "wiki" / "knowledge",
         root / "wiki" / "trends",
         root / "data",
@@ -36,9 +38,9 @@ def main() -> int:
         directory.mkdir(parents=True, exist_ok=True)
 
     files = {
-        root / "wiki" / "index.md": """# AI Use Reflection Wiki\n\nMaintainer: [Jin Hefeng](https://github.com/jinhefeng/ai-use-reflection)\n\n## Sections\n\n- [Sessions](sessions/)\n- [Capabilities](capabilities/)\n- [Knowledge](knowledge/)\n- [Trends](trends/)\n""",
+        root / "wiki" / "index.md": """# AI Use Reflection Wiki\n\nMaintainer: [Jin Hefeng](https://github.com/jinhefeng/ai-use-reflection)\n\n## Sections\n\n- [Sessions](sessions/)\n- [Capabilities](capabilities/)\n- [Interventions](interventions/)\n- [Task contributions](contributions/)\n- [Knowledge](knowledge/)\n- [Trends](trends/)\n""",
         root / "data" / "session-index.jsonl": "",
-        root / "data" / "current-review.json": json.dumps({"key_points": [], "human_contribution": [], "open_questions": [], "capabilities": [], "knowledge": []}, ensure_ascii=False, indent=2) + "\n",
+        root / "data" / "current-review.json": json.dumps({"key_points": [], "interventions": [], "human_contribution": [], "intervention_efficacy": {}, "human_task_contribution": [], "open_questions": [], "capabilities": [], "knowledge": []}, ensure_ascii=False, indent=2) + "\n",
         root / "data" / "link-index.json": "{}\n",
     }
     for path, content in files.items():

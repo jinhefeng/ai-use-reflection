@@ -14,6 +14,56 @@ Use this skill to turn visible human–AI collaboration into a small, reviewable
 
 The canonical long-term data is a set of small Markdown Wiki pages. The HTML file is a generated view, not the source of truth.
 
+## Core model: intervention efficacy and task contribution
+
+Make the primary question: **How efficiently did the user's intervention improve the AI's trajectory and the task outcome?**
+
+Treat an intervention as any user action that changes direction, context, constraints, decomposition, delegation, correction, verification, approval, or stopping decisions. For each meaningful intervention, trace:
+
+1. **Signal** — what the user added or changed;
+2. **Mechanism** — how it changed the AI's plan, assumptions, output, or risk;
+3. **Outcome** — what quality, scope, accuracy, rework, or risk result followed;
+4. **Observable cost** — turns, revisions, delay, or repeated explanation when visible;
+5. **Guidance** — how to make a similar intervention earlier, clearer, or more selective next time.
+
+Evaluate efficacy as a vector, not an unsupported single score:
+
+- leverage: did the intervention materially change the trajectory?
+- precision: did it address the root issue rather than a symptom?
+- timing: did it arrive before avoidable work?
+- economy: did it reduce unnecessary turns or rework?
+- coverage: did it protect the goal, constraints, acceptance criteria, and risks?
+- verification: did it establish enough evidence to trust the result?
+
+Use `high`, `medium`, `low`, or `uncertain` with confidence and evidence. Do not treat prompt length, token count, or number of messages as value by themselves.
+
+Load [references/intervention-rubric.md](references/intervention-rubric.md) when tagging intervention events, comparing efficacy dimensions, or writing task-contribution evidence.
+
+Assess human contribution to the concrete task in separate categories: direction and prioritization, domain context, constraints and risk judgment, decision quality, verification, and final accountability. Use labels such as `decisive`, `enabling`, `supporting`, `necessary`, or `uncertain`, and link each conclusion to evidence. This is an assessment of contribution to a task, never a rating of the person's overall worth, intelligence, personality, or employment performance.
+
+The useful output is a loop:
+
+```text
+intervention trace → efficacy assessment → task-contribution evidence → next-use guidance → next session test
+```
+
+Use a compact intervention ledger for every substantive review. One row is one
+user move that changed the AI's decision space; do not create one row per
+message. At minimum record `event_id`, `turn_ref`, `type`, `signal`,
+`mechanism`, `outcome`, `observable_cost`, `efficacy`, `confidence`, and
+`evidence`. This ledger is the bridge between the visible conversation and
+the long-term intervention Wiki.
+
+Assess efficiency as useful outcome change relative to observable intervention
+cost. Prefer comparisons such as "prevented a likely rework cycle" or
+"corrected the root assumption after two late turns" over activity measures
+such as prompt length, token count, or message count. Do not invent a
+counterfactual; use `uncertain` when the session does not show what changed.
+When summarizing human contribution, distinguish "the user supplied the
+decision or constraint that enabled the result" from "the user performed the
+execution." The first can be decisive even when the AI performed most of the
+mechanical work.
+
 ## Operating rules
 
 - Analyze only content visible in the current session and files explicitly available in the workspace. Never claim to have read hidden or historical chat logs.
@@ -47,6 +97,8 @@ The resolved store contains:
 │   ├── index.md
 │   ├── sessions/<session-id>.md
 │   ├── capabilities/<capability-slug>.md
+│   ├── interventions/<dimension-slug>.md
+│   ├── contributions/<category-slug>.md
 │   ├── knowledge/<domain>/<topic-slug>.md
 │   └── trends/<period>.md
 ├── data/
@@ -114,13 +166,24 @@ Build a concise session page with these sections:
 - Proposed knowledge updates
 - One or two next-session experiments
 
+Add three required analysis blocks to every substantive review:
+
+- **Intervention efficacy**: strongest and weakest interventions, vector assessment, observable cost, and confidence;
+- **Human task contribution**: which decisions or judgments materially enabled the outcome, with evidence;
+- **AI-use guidance**: one to three concrete changes for the next similar task, prioritized by expected leverage.
+
+Show the intervention ledger before proposing durable updates. Rank guidance
+by expected leverage and reversibility, and phrase each item as a testable
+behavior for the next session. If there is no reliable signal of improvement,
+say so instead of manufacturing a score.
+
 Analyze these capability dimensions when relevant: goal framing, context provision, constraints, decomposition, delegation, prompt iteration, verification, correction, tool selection, and judgment boundaries.
 
-For domain knowledge, record only observable changes: concepts encountered, explanations the user refined, decisions made, artifacts produced, verified facts, and open questions. Do not label a topic as mastered from one conversation.
+For domain knowledge, record only observable changes: concepts encountered, explanations the user refined, decisions made, artifacts produced, verified facts, and open questions. Do not label a topic as mastered from one conversation. Keep knowledge growth separate from intervention efficacy and task contribution.
 
 ### 4. Update the Wiki after confirmation
 
-Create or update the session page first. Then apply only user-confirmed deltas to capability and knowledge pages. Prefer an evidence log over a single score:
+Create or update the session page first. Then apply only user-confirmed deltas to capability, intervention, contribution, and knowledge pages. Prefer an evidence log over a single score:
 
 ```yaml
 status: improving
@@ -138,6 +201,8 @@ Use qualitative trend states such as `emerging`, `stable`, `improving`, `needs-v
 Run `scripts/build_dashboard.py` with the store path and output path. The generated `reflection-dashboard.html` should show:
 
 - the latest session review and key points;
+- intervention efficacy vector, confidence, and guidance;
+- human task contribution categories and evidence;
 - current capability states and evidence counts;
 - knowledge topics and open questions;
 - a recent session timeline;

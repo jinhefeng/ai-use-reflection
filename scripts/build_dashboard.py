@@ -62,16 +62,55 @@ def build(root: Path) -> str:
     review = load_json(root / "data" / "current-review.json", {})
     sessions = read_jsonl(root / "data" / "session-index.jsonl")[-12:][::-1]
     capabilities = page_cards(root, "capabilities", "能力")
+    interventions = page_cards(root, "interventions", "干预效能")
+    contributions = page_cards(root, "contributions", "任务贡献")
     knowledge = page_cards(root, "knowledge", "知识")
     trends = page_cards(root, "trends", "趋势")
     key_points = review.get("key_points", [])
+    interventions_current = review.get("interventions", []) or []
     human = review.get("human_contribution", [])
+    task_contribution = review.get("human_task_contribution", []) or human
+    efficacy = review.get("intervention_efficacy", {}) or {}
     open_questions = review.get("open_questions", [])
+
+    def item_markup(item):
+        if isinstance(item, dict):
+            label = item.get("category") or item.get("dimension") or item.get("priority") or "记录"
+            note = item.get("note") or item.get("behavior") or item.get("summary") or item.get("expected_gain") or ""
+            confidence = item.get("confidence")
+            suffix = f"（置信度：{esc(confidence)}）" if confidence else ""
+            return f"<li><strong>{esc(label)}</strong>：{esc(note)}{suffix}</li>"
+        return f"<li>{esc(item)}</li>"
 
     def list_markup(items, empty="暂无记录"):
         if not items:
             return f"<p class=\"muted\">{empty}</p>"
-        return "<ul>" + "".join(f"<li>{esc(item)}</li>" for item in items) + "</ul>"
+        return "<ul>" + "".join(item_markup(item) for item in items) + "</ul>"
+
+    def intervention_markup(items):
+        if not items:
+            return '<p class="muted">暂无本次复盘的干预账本。</p>'
+        rows = []
+        for item in items:
+            if not isinstance(item, dict):
+                rows.append(f"<li>{esc(item)}</li>")
+                continue
+            event_id = item.get("event_id", "干预")
+            event_type = item.get("type", [])
+            if isinstance(event_type, list):
+                event_type = " / ".join(str(value) for value in event_type)
+            efficacy = item.get("efficacy", {}) or {}
+            dimensions = ", ".join(f"{key}: {value}" for key, value in efficacy.items())
+            rows.append(
+                f'<li><strong>{esc(event_id)}</strong> · {esc(event_type)}：{esc(item.get("signal", ""))}'
+                f'<br><span class="muted">机制：{esc(item.get("mechanism", ""))}；结果：{esc(item.get("outcome", ""))}；成本：{esc(item.get("observable_cost", ""))}</span>'
+                f'<br><span class="metric">{esc(dimensions or "效能待评估")}</span> <span class="muted">置信度：{esc(item.get("confidence", "暂无"))}</span></li>'
+            )
+        return "<ol class=\"ledger\">" + "".join(rows) + "</ol>"
+
+    dimensions = efficacy.get("dimensions", {}) or {}
+    dimension_markup = " ".join(f'<span class="metric"><strong>{esc(key)}</strong> {esc(value)}</span>' for key, value in dimensions.items())
+    efficacy_markup = f'''<div class="metric-row"><span class="metric"><strong>总体</strong> {esc(efficacy.get("overall", "暂无"))}</span><span class="metric"><strong>置信度</strong> {esc(efficacy.get("confidence", "暂无"))}</span>{dimension_markup}</div><p>{esc(efficacy.get("summary", "干预效能将在确认复盘后显示。"))}</p>{list_markup(efficacy.get("guidance", []), "暂无下一步指导。" )}'''
 
     session_markup = "".join(
         f'<li><span class="date">{esc(item.get("date"))}</span><strong>{esc(item.get("title"))}</strong><span class="muted">{esc(item.get("summary"))}</span></li>'
@@ -92,8 +131,10 @@ def build(root: Path) -> str:
     .sub {{ color:var(--muted); }} .stamp {{ color:var(--muted); text-align:right; }} .hero,.panel,.card {{ background:white; border:1px solid var(--line); border-radius:16px; box-shadow:0 8px 24px rgba(33,47,79,.05); }}
     .hero {{ padding:24px; background:linear-gradient(135deg,#fff,#f1f5ff); }} .hero-grid {{ display:grid; grid-template-columns:1.2fr .8fr; gap:18px; }}
     .panel {{ padding:20px; }} .grid {{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }} .card {{ padding:16px; }} .card p {{ color:var(--muted); font-size:14px; }}
+    .metric-row {{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }} .metric {{ display:inline-block; padding:5px 9px; background:#eef3ff; border-radius:999px; color:#29447f; font-size:13px; }}
     .eyebrow,.date {{ color:var(--accent); font-size:12px; text-transform:uppercase; letter-spacing:.08em; font-weight:700; }} .eyebrow {{ margin-bottom:8px; }} .muted {{ color:var(--muted); }} ul {{ margin:8px 0 0; padding-left:20px; }}
     .timeline {{ list-style:none; padding:0; margin:0; }} .timeline li {{ display:grid; grid-template-columns:120px 200px 1fr; gap:12px; padding:11px 0; border-bottom:1px solid var(--line); }} .timeline li:last-child {{ border-bottom:0; }}
+    .ledger {{ margin:0; padding-left:24px; }} .ledger li {{ padding:12px 0; border-bottom:1px solid var(--line); }} .ledger li:last-child {{ border-bottom:0; }}
     footer {{ margin-top:36px; padding-top:18px; border-top:1px solid var(--line); color:var(--muted); font-size:13px; }}
     @media (max-width:760px) {{ header,.hero-grid {{ display:block; }} .stamp {{ text-align:left; margin-top:14px; }} .grid {{ grid-template-columns:1fr; }} .timeline li {{ grid-template-columns:1fr; gap:2px; }} }}
   </style>
@@ -102,8 +143,13 @@ def build(root: Path) -> str:
 <main>
   <header><div><div class="eyebrow">Human–AI learning loop</div><h1>AI 使用复盘</h1><p class="sub">把会话中的判断、协作和知识变化，沉淀成可追溯的 Wiki。</p></div><div class="stamp">维护者：{esc(AUTHOR)}<br><a href="{GITHUB}">{GITHUB}</a></div></header>
   <section class="hero"><div class="hero-grid"><div><div class="eyebrow">Latest review</div><h2>{esc(review.get("title", "尚未生成本次复盘"))}</h2>{list_markup(key_points, "完成一次确认后的复盘，这里会显示本次重点。")}</div><div><div class="eyebrow">Human contribution</div>{list_markup(human, "暂无已确认的长期结论。")}</div></div></section>
+  <h2>干预账本</h2><section class="panel">{intervention_markup(interventions_current)}</section>
+  <h2>干预效能</h2><section class="panel">{efficacy_markup}</section>
+  <h2>人类任务贡献</h2><section class="panel">{list_markup(task_contribution, "暂无已确认的任务贡献证据。")}</section>
   <h2>开放问题</h2><section class="panel">{list_markup(open_questions, "暂无开放问题。")}</section>
   <h2>AI 协作能力</h2><section class="grid">{''.join(card_markup(card) for card in capabilities) or '<p class="muted">暂无能力页面。</p>'}</section>
+  <h2>干预 Wiki</h2><section class="grid">{''.join(card_markup(card) for card in interventions) or '<p class="muted">暂无干预页面。</p>'}</section>
+  <h2>任务贡献 Wiki</h2><section class="grid">{''.join(card_markup(card) for card in contributions) or '<p class="muted">暂无任务贡献页面。</p>'}</section>
   <h2>知识 Wiki</h2><section class="grid">{''.join(card_markup(card) for card in knowledge) or '<p class="muted">暂无知识页面。</p>'}</section>
   <h2>趋势</h2><section class="grid">{''.join(card_markup(card) for card in trends) or '<p class="muted">暂无趋势页面。</p>'}</section>
   <h2>最近会话</h2><section class="panel"><ul class="timeline">{session_markup}</ul></section>
