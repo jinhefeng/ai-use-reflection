@@ -34,7 +34,7 @@ Build and publish `ai-use-reflection`, a Codex skill that turns visible human–
 - Objective: Initialize Git, create the remote repository, commit the skill, and push the project.
 - Acceptance: Remote repository exists under the user-confirmed visibility and contains the validated skill.
 - Visibility: public, confirmed by the user.
-- Remaining dependency: local `gh` authentication is invalid; use the connected browser session for repository creation if needed.
+- Remaining dependency: local `gh` authentication is invalid and the connected browser is currently at the GitHub sign-in page; user sign-in is required before repository creation.
 
 ## 4. Current Focus
 
