@@ -6,11 +6,11 @@ Build and publish `ai-use-reflection`, a Codex skill that turns visible human–
 
 ## 2. Success Criteria
 
-- [ ] Skill metadata and instructions are valid and clearly trigger on session reflection, Wiki updates, and dashboard generation.
-- [ ] A non-destructive Wiki store can be initialized and compact session metadata can be registered.
-- [ ] A self-contained `reflection-dashboard.html` renders current review, capability, knowledge, trend, source links, and Jin Hefeng attribution.
-- [ ] Scripts pass fixture-based checks and the skill passes structural validation.
-- [ ] A GitHub repository is created and the project is published at `https://github.com/jinhefeng/ai-use-reflection`.
+- [x] Skill metadata and instructions are valid and clearly trigger on session reflection, Wiki updates, and dashboard generation.
+- [x] A non-destructive Wiki store can be initialized and compact session metadata can be registered.
+- [x] A self-contained `reflection-dashboard.html` renders current review, capability, knowledge, trend, source links, and Jin Hefeng attribution.
+- [x] Scripts pass fixture-based checks and structural validation has been completed with the PyYAML dependency limitation recorded.
+- [x] A public GitHub repository is created and the project is published at `https://github.com/jinhefeng/ai-use-reflection`.
 
 ## 3. Task Tree
 
@@ -25,22 +25,22 @@ Build and publish `ai-use-reflection`, a Codex skill that turns visible human–
 - Acceptance: Fixture run creates the store, registers sessions, detects threshold, and generates a readable dashboard.
 
 ### T3 — Validate and forward-test
-- Status: 进行中
+- Status: 已完成
 - Objective: Run structural validation and realistic fixture tests; record limitations and debt.
 - Acceptance: Fixture and syntax checks pass; structural validation is either passed or its dependency blocker is recorded; no unrelated workspace files are changed.
 
 ### T4 — Create and publish the GitHub project
-- Status: 进行中
+- Status: 已完成
 - Objective: Initialize Git, create the remote repository, commit the skill, and push the project.
 - Acceptance: Remote repository exists under the user-confirmed visibility and contains the validated skill.
 - Visibility: public, confirmed by the user.
-- Remaining dependency: local `gh` authentication is invalid and the connected browser is currently at the GitHub sign-in page; user sign-in is required before repository creation.
+- GitHub repository: public `https://github.com/jinhefeng/ai-use-reflection`, default branch `main`.
 
 ## 4. Current Focus
 
 - Task: T1 → T2
 - Objective: Finish the local skill and deterministic artifact pipeline before external publication.
-- Next action: Create the public repository and push `main`.
+- Next action: Project MVP is complete; future work can address the session-end hook.
 
 ## 5. Decision Log
 
@@ -67,6 +67,7 @@ Build and publish `ai-use-reflection`, a Codex skill that turns visible human–
 | 2026-08-15 | Added cross-session capability and knowledge Wiki to MVP | User requested long-term analysis in the first version | T1, T2 |
 | 2026-08-15 | Corrected presentation target from HTM to HTML | User correction | T1, T2 |
 | 2026-08-15 | Initialized local Git repository and committed the skill | User requested a GitHub project | T4 |
+| 2026-08-15 | Created public GitHub repository and pushed `main` | User confirmed public visibility and completed CLI device login | T4 |
 
 ## 8. Detail Pointers
 
@@ -89,4 +90,4 @@ Build and publish `ai-use-reflection`, a Codex skill that turns visible human–
 | ID | Discovered in | Debt | Why deferred | Trigger / target round | Priority | Status |
 |---|---|---|---|---|---|---|
 | D-001 | T2 | Add a real Codex session-end hook for proactive prompts | The skill cannot receive background events by itself | After local MVP validation | P1 | queued |
-| D-002 | T4 | Restore or replace the invalid local `gh` token | Local CLI publishing is currently unavailable | Before future automated releases | P1 | queued |
+| D-002 | T4 | Restore or replace the invalid local `gh` token | Resolved through GitHub CLI device login | Before future automated releases | P1 | resolved |
