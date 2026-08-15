@@ -11,24 +11,24 @@ Build and publish `ai-use-reflection`, a Codex skill that turns visible human–
 - [x] A self-contained `reflection-dashboard.html` renders current review, capability, knowledge, trend, source links, and Jin Hefeng attribution.
 - [x] Scripts pass fixture-based checks and structural validation has been completed with the PyYAML dependency limitation recorded.
 - [x] A public GitHub repository is created and the project is published at `https://github.com/jinhefeng/ai-use-reflection`.
-- [ ] Runtime storage resolves to a portable shared user directory by default, supports explicit project scope, and reports the actual path after writes.
+- [x] Runtime storage resolves to a portable shared user directory by default, supports explicit project scope, and reports the actual path after writes.
 
 ## 3. Task Tree
 
 ### T1 — Define and implement the skill package
-- Status: 进行中
+- Status: 已完成
 - Objective: Create the reusable skill, Wiki schema, portable storage resolver, deterministic helpers, and attribution.
 - Acceptance: Skill folder contains valid `SKILL.md`, `agents/openai.yaml`, references, resolver, and tested scripts.
 
 ### T2 — Implement the reflection data and presentation loop
-- Status: 进行中
+- Status: 已完成
 - Objective: Support quiet session registration, review thresholds, portable global storage, explicit project scope, Wiki-oriented storage, and HTML dashboard output.
 - Acceptance: Fixture run resolves both global and project roots, creates the selected store, registers sessions, detects threshold, and generates a readable dashboard.
 
 ### T3 — Validate and forward-test
-- Status: 未开始
+- Status: 已完成
 - Objective: Run structural validation and realistic fixture tests; record limitations and debt.
-- Acceptance: Resolver, fixture, syntax, and structural checks pass; no unrelated workspace files are changed.
+- Acceptance: Resolver, fixture, syntax, and manual structural checks pass; the bundled validator remains unavailable because the active Python lacks `PyYAML`; no unrelated workspace files are changed.
 
 ### T4 — Create and publish the GitHub project
 - Status: 已完成
@@ -39,9 +39,9 @@ Build and publish `ai-use-reflection`, a Codex skill that turns visible human–
 
 ## 4. Current Focus
 
-- Task: T1 → T2
-- Objective: Replace the project-root storage default with portable shared user storage and explicit project scope.
-- Next action: Test resolver precedence and update the installed skill and public repository.
+- Task: T3
+- Objective: Close the portable storage optimization with validation and synchronized installation.
+- Next action: Project optimization is complete; future work can address the session-end hook.
 
 ## 5. Decision Log
 
@@ -70,6 +70,7 @@ Build and publish `ai-use-reflection`, a Codex skill that turns visible human–
 | 2026-08-15 | Initialized local Git repository and committed the skill | User requested a GitHub project | T4 |
 | 2026-08-15 | Created public GitHub repository and pushed `main` | User confirmed public visibility and completed CLI device login | T4 |
 | 2026-08-15 | Changed runtime storage from implicit project root to portable shared user storage | User identified that absolute paths and project-root defaults do not support cross-IDE archives | T1, T2 |
+| 2026-08-15 | Verified global, environment-selected, project, and explicit storage modes | Fixture tests confirmed path precedence and write reporting | T1, T2, T3 |
 
 ## 8. Detail Pointers
 
@@ -79,7 +80,7 @@ Build and publish `ai-use-reflection`, a Codex skill that turns visible human–
 - Reflection rubric: `references/reflection-rubric.md`.
 - Local commit: `0255bac feat: create AI use reflection skill`.
 - Validation: Python syntax, fixture threshold flow, HTML content inspection, and Ruby YAML parse passed; skill-creator quick validation is blocked because the active Python lacks `PyYAML`.
-- Current optimization: add `scripts/storage.py` and `scripts/resolve_storage.py`; default to platform user data, with `AI_USE_REFLECTION_HOME` and explicit project scope.
+- Current optimization: complete in source, installed skill, and public repository at commit `0bbfc44`.
 
 ## 9. Current Round
 
