@@ -1,0 +1,7 @@
+interface:
+  display_name: "AI 使用复盘"
+  short_description: "跨会话复盘与长期 AI 协作成长档案"
+  default_prompt: "Use $ai-use-reflection to review this session, update the Wiki, and refresh the HTML dashboard."
+
+policy:
+  allow_implicit_invocation: true
