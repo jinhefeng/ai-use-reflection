@@ -17,6 +17,7 @@ Build and publish `ai-use-reflection`, a portable skill that evaluates the effic
 - [x] Reviews provide one to three evidence-matched examples that rewrite weak interventions into better prompts and define a next-session test.
 - [x] In-session triggers detect repeated refinement or stalled progress and suppress duplicate prompts with a cooldown.
 - [x] The public project includes a bilingual README that explains the design philosophy, human value, usage boundary, and MIT License.
+- [x] The public README references a reusable project icon stored inside the repository.
 
 ## 3. Task Tree
 
@@ -49,14 +50,14 @@ Build and publish `ai-use-reflection`, a portable skill that evaluates the effic
 
 ### T6 — Document the project and license it for reuse
 - Status: 已完成
-- Objective: Publish a Chinese/English switchable README that explains the design philosophy, human task value, limits, usage, and MIT licensing.
-- Acceptance: README is readable on GitHub, links to the core files, contains no personal email, and LICENSE is a valid MIT License.
+- Objective: Publish a Chinese/English switchable README, a reusable project icon, and an MIT License that explain the design philosophy, human task value, limits, usage, and identity of the project.
+- Acceptance: README is readable on GitHub, references the repository icon, links to the core files, contains no personal email, and LICENSE is a valid MIT License.
 
 ## 4. Current Focus
 
 - Task: Handoff
-- Objective: Keep the bilingual documentation, MIT License, installed copy, and public repository synchronized.
-- Next action: Commit and publish the README and license update.
+- Objective: Keep the bilingual documentation, project icon, MIT License, installed copy, and public repository synchronized.
+- Next action: Commit and publish the README/icon/license update.
 
 ## 5. Decision Log
 
@@ -93,10 +94,12 @@ Build and publish `ai-use-reflection`, a portable skill that evaluates the effic
 | 2026-08-15 | Added typical weak-intervention cases with improved prompt wording and next-session tests | An efficacy label must lead to an actionable change in AI use | T1, T2, T3 |
 | 2026-08-17 | Added in-session friction triggers and cooldown state | One day of use showed that the session-count fallback never detected live stalls or repeated prompt revisions | T5 |
 | 2026-08-17 | Added bilingual project documentation and MIT License | Make the public project understandable and reusable | T6 |
+| 2026-08-17 | Added a project icon representing human judgment, AI execution, and reflection | Give the open-source project a visual identity aligned with its design philosophy | T6 |
 
 ## 8. Detail Pointers
 
 - Public documentation: README.md.
+- Project icon: assets/ai-use-reflection-icon.png.
 - License: LICENSE.
 - Format: v1 single-file constitution until the project grows beyond the hot-file threshold.
 - Skill instructions: `SKILL.md`.
@@ -104,14 +107,14 @@ Build and publish `ai-use-reflection`, a portable skill that evaluates the effic
 - Reflection rubric: `references/reflection-rubric.md`.
 - Local commit: updated after the core review-model optimization.
 - Validation: Python syntax, fixture threshold flow, HTML content inspection, and Ruby YAML parse passed; skill-creator quick validation is blocked because the active Python lacks `PyYAML`.
-- Current optimization: complete; the bilingual README and MIT License are validated.
+- Current optimization: complete; the bilingual README, project icon, and MIT License are validated.
 
 ## 9. Current Round
 
 - Round: R4
 - Frontier: Handoff
 - Granularity target: objective + output + acceptance + dependency
-- Exit condition: bilingual README, MIT License, installed copy, and public repository are synchronized.
+- Exit condition: bilingual README, project icon, MIT License, installed copy, and public repository are synchronized.
 
 ## 10. Technical Debt Queue
 

@@ -4,6 +4,8 @@
 
 [中文](#chinese) · [English](#english)
 
+![AI 使用复盘图标](assets/ai-use-reflection-icon.png)
+
 > 让人和 AI 的协作，能够被看见、被反思、被验证，并持续变得更好。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -194,6 +196,8 @@ Project repository: <https://github.com/jinhefeng/ai-use-reflection>
 # AI Use Reflection
 
 [中文](#chinese) · [English](#english)
+
+![AI Use Reflection icon](assets/ai-use-reflection-icon.png)
 
 > Make human–AI collaboration visible, reflectable, testable, and continuously improvable.
 
