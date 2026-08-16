@@ -95,6 +95,7 @@ Build and publish `ai-use-reflection`, a portable skill that evaluates the effic
 | 2026-08-17 | Added in-session friction triggers and cooldown state | One day of use showed that the session-count fallback never detected live stalls or repeated prompt revisions | T5 |
 | 2026-08-17 | Added bilingual project documentation and MIT License | Make the public project understandable and reusable | T6 |
 | 2026-08-17 | Added a project icon representing human judgment, AI execution, and reflection | Give the open-source project a visual identity aligned with its design philosophy | T6 |
+| 2026-08-17 | Promoted the icon to the shared README header | Make the project identity visible in both language sections without duplicating the asset | T6 |
 
 ## 8. Detail Pointers
 
