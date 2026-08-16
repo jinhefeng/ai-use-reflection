@@ -1,6 +1,6 @@
 ---
 name: ai-use-reflection
-description: Analyze a visible AI IDE session and a portable cross-session Wiki to identify the human's contribution, update evidence-linked AI collaboration capabilities and domain knowledge, generate review prompts after session thresholds, and refresh a self-contained HTML dashboard. Use when the user asks to review an AI session, track cross-session collaboration growth across tools or projects, update a reflective Wiki, generate or refresh the reflection dashboard, configure session-based review reminders, or choose the runtime archive location.
+description: Analyze a visible AI IDE session and a portable cross-session Wiki to identify the human's contribution, update evidence-linked AI collaboration capabilities and domain knowledge, detect repeated prompt revisions or stalled multi-turn work, generate low-friction review prompts, and refresh a self-contained HTML dashboard. Use when the user asks to review an AI session, improve passive review triggers, track cross-session collaboration growth across tools or projects, update a reflective Wiki, generate or refresh the reflection dashboard, configure session-based review reminders, or choose the runtime archive location.
 ---
 
 # AI Use Reflection
@@ -13,6 +13,8 @@ Project repository: [github.com/jinhefeng/ai-use-reflection](https://github.com/
 Use this skill to turn visible human–AI collaboration into a small, reviewable learning loop. Analyze the current session, distinguish the human's decisions from the AI's execution, propose updates to two separate long-term tracks, and present the result through a Wiki and one generated HTML dashboard.
 
 The canonical long-term data is a set of small Markdown Wiki pages. The HTML file is a generated view, not the source of truth.
+
+Load [references/trigger-rubric.md](references/trigger-rubric.md) when configuring passive review prompts or evaluating in-session friction. Use [scripts/evaluate_trigger.py](scripts/evaluate_trigger.py) from a host integration that can provide compact metrics from the visible session. Keep trigger state separate from long-term Wiki content.
 
 ## Core model: intervention efficacy and task contribution
 
@@ -106,7 +108,8 @@ The resolved store contains:
 ├── data/
 │   ├── session-index.jsonl
 │   ├── current-review.json
-│   └── link-index.json
+│   ├── link-index.json
+│   └── trigger-state.json
 └── reflection-dashboard.html
 ```
 
@@ -142,6 +145,23 @@ python3 scripts/register_session.py --session-id 2026-08-15-001 --title "Skill d
 
 Use the script's `review_due` result to decide whether a suggestion should be shown. The default threshold is three eligible, unreviewed sessions; support a different threshold when the user configures one.
 
+### 1a. Evaluate in-session friction
+
+At safe host checkpoints, pass compact metrics to scripts/evaluate_trigger.py.
+Do this after a meaningful correction or every few user turns, not after every
+message. Suggest a review when:
+
+- the same goal or prompt has been materially revised at least twice;
+- the user has corrected the AI at least three times;
+- the session has at least six user turns and three turns without accepted progress;
+- the goal has been missed twice, or the goal is stalled or blocked;
+- verification has failed twice.
+
+Respect the trigger's cooldown and already-prompted reason codes. A session-level
+trigger and an in-session trigger are complementary: if the user already
+started a review in the session, do not show the same review suggestion again
+at the end unless new evidence appears.
+
 ### 2. Show a low-friction review suggestion
 
 When a review is due, show a compact preview before asking for consent:
@@ -151,6 +171,10 @@ When a review is due, show a compact preview before asking for consent:
 3. Offer `复盘`, `稍后`, and `不再提示` as conversational choices.
 
 Do not make the user type a fixed command. A manual request such as “复盘本次会话” remains supported as an override.
+
+For an in-session trigger, use an even shorter prompt:
+
+> 我注意到同一目标正在反复调整，或经过多轮仍没有可确认进展。现在先做一次 1 分钟复盘，确认目标、卡点和下一条提示词吗？可回复“先复盘”“继续”或“稍后”。
 
 The skill itself cannot run in the background or receive an end-of-session event. If proactive prompting is requested, use an available application hook, automation, or session wrapper to invoke the registration step. Keep that trigger layer separate from the analysis and storage logic.
 

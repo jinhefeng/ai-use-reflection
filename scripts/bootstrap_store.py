@@ -42,6 +42,7 @@ def main() -> int:
         root / "data" / "session-index.jsonl": "",
         root / "data" / "current-review.json": json.dumps({"key_points": [], "interventions": [], "human_contribution": [], "intervention_efficacy": {}, "human_task_contribution": [], "guidance_examples": [], "open_questions": [], "capabilities": [], "knowledge": []}, ensure_ascii=False, indent=2) + "\n",
         root / "data" / "link-index.json": "{}\n",
+        root / "data" / "trigger-state.json": json.dumps({"sessions": {}}, ensure_ascii=False, indent=2) + "\n",
     }
     for path, content in files.items():
         if write_if_missing(path, content):

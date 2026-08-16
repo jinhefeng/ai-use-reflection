@@ -142,6 +142,13 @@ The current review may include:
 
 `data/link-index.json` can map topics and slugs to relative files. It is an optimization layer; Wiki pages remain authoritative.
 
+## Trigger state
+
+data/trigger-state.json is operational metadata for the host integration. It
+stores per-session cooldown timestamps and already-prompted reason codes so a
+live review suggestion is not repeated. It is not a capability, contribution,
+or knowledge record and should not be loaded into long-term analysis.
+
 ## Evidence rules
 
 Use three labels in analysis:
