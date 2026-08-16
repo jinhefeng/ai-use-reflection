@@ -66,7 +66,7 @@ Build and publish `ai-use-reflection`, a portable skill that evaluates the effic
 ## 6. Knowledge Context
 
 - Project workspace: repository root containing this skill.
-- Local Git identity: `Jin Hefeng <[personal-email-removed]>`.
+- Local Git identity: Jin Hefeng.
 - GitHub connector profile nickname: `jinhefeng`.
 - GitHub repository: public `https://github.com/jinhefeng/ai-use-reflection`, default branch `main`.
 - Proactive prompts require an application/automation/session hook; the skill provides registration and decision logic but does not run in the background.
